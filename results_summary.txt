@@ -1,0 +1,55 @@
+Sample: 2021-06-02 -> 2026-07-02  (1277 days)
+NOTE: common-day alignment trims history to QBTS's listing (Aug 2022).
+For a longer SOFI-only beta study, rerun with TICKERS=['SOFI'].
+
+======================================================================
+PILLAR 1 -- time-varying beta (Kalman smoothed)
+======================================================================
+SOFI: beta start=1.05  end=2.10 (+/-0.92)  min=1.03  max=2.83  q_beta=3.13e-03
+QBTS: beta start=0.87  end=4.02 (+/-1.98)  min=-0.15  max=4.10  q_beta=1.52e-02
+
+======================================================================
+PILLAR 2 -- GARCH(1,1): Normal vs Student-t
+======================================================================
+
+SOFI (best dist by AIC: t)
+         alpha    beta  persistence      nu  uncond_vol_annual        aic        bic
+dist                                                                                
+normal  0.0179  0.9682       0.9861     NaN             0.6527  7249.5002  7264.9570
+t       0.0280  0.9529       0.9809  5.4709             0.6607  7154.7164  7175.3255
+  persistence=0.981  annualised uncond vol=66.1%
+
+QBTS (best dist by AIC: t)
+         alpha    beta  persistence      nu  uncond_vol_annual        aic        bic
+dist                                                                                
+normal  0.0936  0.9064          1.0     NaN                NaN  7673.0516  7688.5084
+t       0.0815  0.9185          1.0  4.2685                NaN  6590.6654  6611.2744
+  persistence=1.000  annualised uncond vol=nan%
+
+======================================================================
+PILLAR 3 -- block-bootstrap CIs on sleeve statistics
+======================================================================
+Sharpe (ann.) : 0.080   95% CI [-0.951, 1.043]
+Max drawdown  : 0.907   95% CI [0.609, 0.987]
+
+Block-length sensitivity (Sharpe):
+  L=  5: CI [-0.864, 0.964]
+  L= 10: CI [-0.868, 1.025]
+  L= 20: CI [-0.960, 1.004]
+  L= 40: CI [-1.049, 1.035]
+  L= 60: CI [-1.066, 1.069]
+
+======================================================================
+PILLAR 4 -- 1-day 95% VaR / ES of the sleeve
+======================================================================
+historical    : VaR=6.76%  ES=9.65%   (unconditional)
+parametric-t  : VaR=7.54%  ES=11.30%   (unconditional)
+GARCH-sim (t) : VaR=6.71%  ES=9.35%   (conditional on TODAY)
+GARCH-sim 10d : VaR=21.98%  ES=29.17%
+
+Flagship: block-bootstrap CI on the GARCH-VaR (n_boot=200)...
+1-day 95% VaR = 6.51%,  90% CI [5.32%, 10.25%]  (n_eff=200)
+
+Interpretation: the CI is ESTIMATION uncertainty of the risk number;
+model-form uncertainty (is GARCH(1,1)-t right?) is additional and
+belongs in the limitations section.
